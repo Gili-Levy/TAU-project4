@@ -19,18 +19,14 @@ SUBMISSION_IDS = ["316296771"]
 
 
 def best_mat_mult_time(L):
-	if (len(L)) == 4: # when there are 3 mat left
-		for i in range (len(L)):
-			op1 = L[0]*L[1]*L[2] + L[0]*L[2]*L[3]
-			op2 = L[1]*L[2]*L[3] + L[0]*L[1]*L[3]
-		result = min(op1, op2)
-		return result
-	
-	right = best_mat_mult_time(L[1:])
-	left = best_mat_mult_time(L[:len(L)])
+	if (len(L)) == 3:  # stop recursive when there are 2 mat left
+		return L[0]*L[1]*L[2]
 
-	if right < left: # 2 mats left
-		return L[0]*L[1]*L[len[L]-1] + right
+	right = best_mat_mult_time(L[1:])
+	left = best_mat_mult_time(L[:len(L)-1])
+
+	if right < left:
+		return L[0]*L[1]*L[len(L)-1] + right
 	else:
 		return left + L[0]*L[len(L)-2]*L[len(L)-1]
 
@@ -41,28 +37,35 @@ print (best_mat_mult_time([100,10,100,10]))
 # b
 
 def best_mat_mult_time_fast(L):
-	memo = {}
-	return best_mat_mult_time_fast_with_memo(L,memo)
+	memo = []
+	return best_mat_mult_time_fast_with_memo(L, memo)
 
 
 def best_mat_mult_time_fast_with_memo(L, memo):
-	if (len(L)) == 4:  # when there are 3 mat left
-		for i in range(len(L)):
-			op1 = L[0]*L[1]*L[2] + L[0]*L[2]*L[3]
-			op2 = L[1]*L[2]*L[3] + L[0]*L[1]*L[3]
-		result = min(op1, op2)
-		memo[L] = result
+	if L in memo:
+		return memo[memo.index(L)+1]
+
+	if (len(L)) == 3:  # stop recursive when there are 2 mat left
+		result = L[0]*L[1]*L[2]
+		memo.append([L])
+		memo.append(result)
 		return result
 
 	right = best_mat_mult_time(L[1:])
-	memo[L[1:]] = right
-	left = best_mat_mult_time(L[:len(L)])
-	memo[L[:len(L)]] = left
+	memo.append(L[1:])
+	memo.append(right)
+	left = best_mat_mult_time(L[:len(L)-1])
+	memo.append(L[:len(L)-1])
+	memo.append(left)
 
-	if right < left: # 2 mats left
-		return L[0]*L[1]*L[len[L]-1] + right
+	if right < left:
+		return L[0]*L[1]*L[len(L)-1] + right
 	else:
 		return left + L[0]*L[len(L)-2]*L[len(L)-1]
+
+
+print(best_mat_mult_time_fast([100, 10, 100, 10]))
+
 
 # c
 
