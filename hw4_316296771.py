@@ -146,12 +146,41 @@ def grid_escape1(B):
 	
 	return grid_escape1(row_move) or grid_escape1(col_move) #crop matrix
 
-print (grid_escape1([[1,2,2,2],[2,2,2,2],[2,2,2,2],[2,2,0,2]]))
-
 
 # b
 def grid_escape2(B):
-	pass  # replace this with your code
+	memo = []
+	return grid_escape2_with_memo(B, 0, 0, memo)
+
+def grid_escape2_with_memo(B, i, j, memo):
+	memo.append((i, j))
+
+	if i == len(B)-1 and j == len(B)-1:
+		return True
+	
+	if B[i][j] == 0: # no moves
+		return False
+	
+	if (j+B[i][j] >= len(B)) and (i+B[i][j] >= len(B)) and ((i-B[i][j], j) in memo) and ((i, j-B[i][j]) in memo): # no more moves
+		return False
+	
+	up = False
+	if (i+B[i][j] < len(B)) and (i+B[i][j], j) not in memo: # if not out of index/been there already
+		up = grid_escape2_with_memo(B, i+B[i][j], j, memo)
+
+	right = False
+	if (j+B[i][j] < len(B)) and (i, j+B[i][j]) not in memo: # if not out of index/been there already
+		right = grid_escape2_with_memo(B, i, j+B[i][j], memo)
+
+	down = False
+	if (i-B[i][j] >= 0) and (i-B[i][j], j) not in memo: # if not out of index/been there already
+		down = grid_escape2_with_memo(B, i-B[i][j], j, memo)
+
+	left = False
+	if (j-B[i][j] >= 0) and (i, j-B[i][j]) not in memo:  # if not out of index/been there already
+		left = grid_escape2_with_memo(B, i, j-B[i][j], memo)
+
+	return up or right or down or left
 
 
 ############
