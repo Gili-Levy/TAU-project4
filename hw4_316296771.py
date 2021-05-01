@@ -93,29 +93,32 @@ def mult_order_to_str(mult_order):
 ############
 
 # b
+
+
 def had_local(n, i, j):
-	
 	if n==0: # stop recursion at had(0)
 		return 0
 	
-	if i <= (2**(n-1)-1) and j <= (2**(n-1)-1): #block 1
+	if i <= (pow(2,n-1)-1) and j <= (pow(2,n-1)-1): #block 1
 		return had_local(n-1, i, j)
 	
-	elif i <= (2**(n-1)-1) and j > (2**(n-1)-1):  # block 2
+	elif i <= (pow(2,n-1)-1) and j > (pow(2,n-1)-1):  # block 2
 		return had_local(n-1, i, j-2**(n-1))
 	
-	elif i > (2**(n-1)-1) and j <= (2**(n-1)-1):  # block 2
+	elif i > (pow(2,n-1)-1) and j <= (pow(2,n-1)-1):  # block 2
 		return had_local(n-1, i-2**(n-1), j)
 	
-	elif i > (2**(n-1)-1) and j > (2**(n-1)-1):  # block 4 (opposite matrix)
-		if had_local(n-1,i-2**(n-1), j-2**(n-1)) == 0:
+	elif i > (pow(2,n-1)-1) and j > (pow(2,n-1)-1):  # block 4 (opposite matrix)
+		if had_local(n-1,i-pow(2,n-1), j-pow(2,n-1)) == 0:
 			return 1
 		else:
 			return 0
 	
-print (had_local(2,0,0))
+
 # d
-def had_complete(n): return None  # replace this with your code
+def had_complete(n): 
+	create_lst = lambda n : [[had_local(n, i, j) for j in range (pow(2, n))] for i in range (pow(2, n))]
+	return create_lst(n)
 
 ############
 # QUESTION 4
