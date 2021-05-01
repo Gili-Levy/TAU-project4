@@ -128,11 +128,28 @@ def had_complete(n):
 
 
 def grid_escape1(B):
-	pass  # replace this with your code
+	print (B)
+	if B == [] or B[0] == [] or B[0][0] == 0:  # end of rows/cols/can't move anywhere
+		return False
+		
+	if ((B[0][0] == (len(B)-1)) and (len(B[0])==1)) or ((B[0][0] == (len(B[0])-1)) and (len(B)==1)):  # WIN in col or row
+		return True
+	
+	if (B[0][0] > (len(B)-1)) and (B[0][0] > (len(B[0])-1)):  # exceeded row and col num 
+		return False
+	
+	row_move = B[B[0][0]:]
+	
+	col_move = []
+	for i in range (len(B)):
+		col_move.append(B[i][B[0][0]:])
+	
+	return grid_escape1(row_move) or grid_escape1(col_move) #crop matrix
+
+print (grid_escape1([[1,2,2,2],[2,2,2,2],[2,2,2,2],[2,2,0,2]]))
+
 
 # b
-
-
 def grid_escape2(B):
 	pass  # replace this with your code
 
