@@ -17,7 +17,6 @@ SUBMISSION_IDS = ["316296771"]
 
 # a
 
-
 def best_mat_mult_time(L):
 	if (len(L)) == 3:  # stop recursive when there are 2 mat left
 		return L[0]*L[1]*L[2]
@@ -29,9 +28,6 @@ def best_mat_mult_time(L):
 		return L[0]*L[1]*L[len(L)-1] + right
 	else:
 		return left + L[0]*L[len(L)-2]*L[len(L)-1]
-
-
-print (best_mat_mult_time([100,10,100,10]))
 
 
 # b
@@ -64,14 +60,19 @@ def best_mat_mult_time_fast_with_memo(L, memo):
 		return left + L[0]*L[len(L)-2]*L[len(L)-1]
 
 
-print(best_mat_mult_time_fast([100, 10, 100, 10]))
-
-
 # c
 
-
 def best_mat_mult_order(L):
-	pass  # replace this with your code
+	if (len(L)) == 3:  # stop recursive when there are 2 mat left
+		return []
+
+	right = best_mat_mult_time(L[1:])
+	left = best_mat_mult_time(L[:len(L)-1])
+
+	if right < left:
+		return L[0]*L[1]*L[len(L)-1] + right
+	else:
+		return left + L[0]*L[len(L)-2]*L[len(L)-1]
 
 
 def mult_order_to_str(mult_order):
