@@ -29,7 +29,7 @@ def best_mat_mult_time(L):
 	else:
 		return left + L[0]*L[len(L)-2]*L[len(L)-1]
 
-
+#print(best_mat_mult_time([40, 20, 30, 10, 30]))
 # b
 
 def best_mat_mult_time_fast(L):
@@ -43,16 +43,19 @@ def best_mat_mult_time_fast_with_memo(L, memo):
 
 	if (len(L)) == 3:  # stop recursive when there are 2 mat left
 		result = L[0]*L[1]*L[2]
-		memo.append([L])
+		memo.append(L)
 		memo.append(result)
 		return result
 
 	right = best_mat_mult_time(L[1:])
-	memo.append(L[1:])
-	memo.append(right)
+	if L[1:] not in memo:
+		memo.append(L[1:])
+		memo.append(right)
+	
 	left = best_mat_mult_time(L[:len(L)-1])
-	memo.append(L[:len(L)-1])
-	memo.append(left)
+	if L[:len(L)-1] not in memo:
+		memo.append(L[:len(L)-1])
+		memo.append(left)
 
 	if right < left:
 		return L[0]*L[1]*L[len(L)-1] + right
@@ -63,18 +66,21 @@ def best_mat_mult_time_fast_with_memo(L, memo):
 # c
 
 def best_mat_mult_order(L):
+	pass
+"""
 	if (len(L)) == 3:  # stop recursive when there are 2 mat left
-		return []
+		return (L[0]*L[1]*L[2], [0, 0])
 
 	right = best_mat_mult_time(L[1:])
 	left = best_mat_mult_time(L[:len(L)-1])
 
-	if right < left:
-		return L[0]*L[1]*L[len(L)-1] + right
+	if right[0] < left[0]:
+		return (L[0]*L[1]*L[len(L)-1] + right, [0, right[1]])
 	else:
-		return left + L[0]*L[len(L)-2]*L[len(L)-1]
+		return (left + L[0]*L[len(L)-2]*L[len(L)-1], [left[1], len(L)-1])
 
-
+print (best_mat_mult_order([10,100,10,100]))
+"""
 def mult_order_to_str(mult_order):
 	if type(mult_order) is int:
 		return str(mult_order)
@@ -88,9 +94,26 @@ def mult_order_to_str(mult_order):
 
 # b
 def had_local(n, i, j):
-	pass  # replace this with your code
-
-
+	
+	if n==0: # stop recursion at had(0)
+		return 0
+	
+	if i <= (2**(n-1)-1) and j <= (2**(n-1)-1): #block 1
+		return had_local(n-1, i, j)
+	
+	elif i <= (2**(n-1)-1) and j > (2**(n-1)-1):  # block 2
+		return had_local(n-1, i, j-2**(n-1))
+	
+	elif i > (2**(n-1)-1) and j <= (2**(n-1)-1):  # block 2
+		return had_local(n-1, i-2**(n-1), j)
+	
+	elif i > (2**(n-1)-1) and j > (2**(n-1)-1):  # block 4 (opposite matrix)
+		if had_local(n-1,i-2**(n-1), j-2**(n-1)) == 0:
+			return 1
+		else:
+			return 0
+	
+print (had_local(2,0,0))
 # d
 def had_complete(n): return None  # replace this with your code
 
