@@ -80,13 +80,13 @@ def best_mat_mult_order(L):
 		return (left + L[0]*L[len(L)-2]*L[len(L)-1], [left[1], len(L)-1])
 
 print (best_mat_mult_order([10,100,10,100]))
-"""
+
 def mult_order_to_str(mult_order):
 	if type(mult_order) is int:
 		return str(mult_order)
 
 	return f"({mult_order_to_str(mult_order[0])}) * ({mult_order_to_str(mult_order[1])})"
-
+"""
 
 ############
 # QUESTION 3
@@ -274,9 +274,9 @@ def distance_mem(s1, s2, memo):  # s1 is what we want, s2 is what we have
 ########
 
 def test():
-
+	"""
 	# Q2
-	L1 = [100, 10, 100, 10]
+	L1 = [100,10,100, 10]
 	# a
 	if best_mat_mult_time(L1) != 20000:
 		print("Error in best_mat_mult_time")
@@ -285,20 +285,22 @@ def test():
 		print("Error in best_mat_mult_time_fast")
 	# c
 	if mult_order_to_str(best_mat_mult_order(L1)) != "(0) * ((1) * (2))":
-		print("Error in best_mat_mult_order")
+		print("Error in best_mat_mult_order")	
 
+	"""
 	# Q3
 	# b
-	if(had_local(2, 2, 2) != 1):
+	if(had_local(2,2,2) != 1):
 		print("Error in had_local")
 	# d
-	if had_complete(1) != [[0, 0], [0, 1]]:
+	if had_complete(1) != [[0,0],[0,1]]:
 		print("Error in had_complete")
 
+	  
 	# Q4
-	B1 = [[1, 2, 2, 2], [2, 2, 2, 2], [2, 2, 2, 2], [2, 2, 1, 2]]
-	B2 = [[2, 3, 1, 2], [2, 2, 2, 2], [2, 2, 3, 2], [2, 2, 2, 2]]
-	B3 = [[2, 1, 2, 1], [1, 2, 1, 1], [2, 2, 2, 2], [4, 4, 4, 4]]
+	B1 = [[1,2,2,2],[2,2,2,2],[2,2,2,2],[2,2,1,2]]
+	B2 = [[2,3,1,2], [2,2,2,2], [2,2,3,2], [2,2,2,2]]
+	B3 = [[2,1,2,1], [1,2,1,1], [2,2,2,2], [4,4,4,4]]
 
 	# a
 	if grid_escape1(B1) is False:
@@ -315,19 +317,21 @@ def test():
 		print("Error in grid_escape2 - B2")
 	if grid_escape2(B3) is True:
 		print("Error in grid_escape2 - B3")
+	
 
-	# Q5
+	#Q5
 	# a
-	if partition([3, 1, 1, 2, 2, 1]) is False:
+	if partition([3,1,1,2,2,1]) not in [[3,2],[2,3],[3,1,1],[1,3,1],[1,1,3],[1,1,1,2],[1,1,2,1],[1,2,1,1],[2,1,1,1],[1,2,2],[2,1,2],[2,2,1]]:
 		print("Error in partition - 1")
-	if partition([1, 1, 1]) is True:
+	if partition([1,1,1]) is not None:
 		print("Error in partition - 2")
 
 	# b
-	if n_to_k(4, 2) != 7:
+	if n_to_k(4,2) != 7:
 		print("Error in n_to_k")
 
-	# Q6
+
+	#Q6
 	if distance('computer', 'commuter') != 1 or \
 			distance('sport', 'sort') != 1 or \
 			distance('', 'ab') != 2 or distance('kitten', 'sitting') != 3:
@@ -337,3 +341,5 @@ def test():
 			distance_fast('sport', 'sort') != 1 or \
 			distance_fast('', 'ab') != 2 or distance_fast('kitten', 'sitting') != 3:
 		print("Error in distance_fast")
+
+test()
