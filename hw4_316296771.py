@@ -128,7 +128,9 @@ def had_complete(n):
 
 
 def grid_escape1(B):
-	print (B)
+	if len(B)==1 and len(B[0])==1: # Mat with only one value
+		return True
+	
 	if B == [] or B[0] == [] or B[0][0] == 0:  # end of rows/cols/can't move anywhere
 		return False
 		
@@ -146,6 +148,8 @@ def grid_escape1(B):
 	
 	return grid_escape1(row_move) or grid_escape1(col_move) #crop matrix
 
+#print (grid_escape1([[1]]))
+#print (grid_escape1([[0,2,3,1,1],[2,3,1,2,3],[1,3,2,2,3],[0,2,3,2,3]]))
 
 # b
 def grid_escape2(B):
@@ -189,24 +193,80 @@ def grid_escape2_with_memo(B, i, j, memo):
 
 # a
 def partition(S):
-	pass  # replace this with your code
+	P = []
+	return partition_check(S, P)
 
+def partition_check(S,P):
+	if sum(P) > sum(S): # p will never be equal to s
+		return None
+	elif sum(P) == sum(S): # found it!
+		return P
+	for i in range (len(S)): 
+		new_s = S.copy() # mutable
+		new_s.pop(i)
+		new_p = P.copy()  # mutable
+		new_p.append(S[i])
+		check = partition_check(new_s, new_p) # recursion
+		if check != None: # if p was found, don't continue the loop
+			return check
+			
+	return None
 
 # b
 def n_to_k(n, k):
-	pass  # replace this with your code
+	memo = {}
+	return n_to_k_with_memo(n, k, memo)
+
+def n_to_k_with_memo(n, k, memo):
+	if n==k or k==1:
+		return 1	
+	if (n,k) not in memo:
+		memo[(n,k)] = k * n_to_k_with_memo(n-1, k, memo) + n_to_k_with_memo(n-1, k-1, memo)
+	return memo[(n,k)]
 
 
 ############
 # QUESTION 6
 ############
 
-def distance(s1, s2):
-	pass
+def distance(s1, s2):  # s1 is what we want, s2 is what we have
+	if s1 == s2: # done (even if they are both empty) -- O(1)
+		return 0
+	if s2 == "" and s1 != "":  # -- O(1)
+		return len(s1) #add
+	if s1 == "" and s2 != "":  # -- O(1)
+		return len(s2) #remove
+	if s1[0] == s2[0]: # continue to the next letter
+		return distance(s1[1:],s2[1:]) # -- O(n)
+	
+	change = 1 + distance(s1[1:], s2[1:])  # -- O(n)
+	add = 1 + distance(s1[1:], s2) # -- O(n)
+	remove = 1 + distance(s1, s2[1:])  # -- O(n)
+	return min(change, add, remove)  # -- O(1)
 
 
 def distance_fast(s1, s2):
-	pass
+	memo = {}
+	return distance_mem(s1,s2,memo)
+
+def distance_mem(s1, s2, memo):  # s1 is what we want, s2 is what we have
+	if s1 == s2:  # done (even if they are both empty) -- O(1)
+		return 0
+	if s2 == "" and s1 != "":  # -- O(1)
+		return len(s1)  # add
+	if s1 == "" and s2 != "":  # -- O(1)
+		return len(s2)  # remove
+	
+	if (s1,s2) not in memo:
+		if s1[0] == s2[0]:  # continue to the next letter
+			memo[(s1, s2)] = distance_mem(s1[1:], s2[1:], memo)  # -- O(n)
+			return memo[(s1, s2)]
+
+		change = 1 + distance_mem(s1[1:], s2[1:], memo)  # -- O(n)
+		add = 1 + distance_mem(s1[1:], s2, memo)  # -- O(n)
+		remove = 1 + distance_mem(s1, s2[1:], memo)  # -- O(n)
+		memo[(s1,s2)] = min(change, add, remove)  # -- O(1)
+	return memo[(s1, s2)]
 
 
 ########
