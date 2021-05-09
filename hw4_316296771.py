@@ -18,6 +18,8 @@ SUBMISSION_IDS = ["316296771"]
 # a
 
 def best_mat_mult_time(L):
+	if L == []:
+		return 0
 	i = 1
 	j = len(L)-1
 	return M(L,i,j)
@@ -40,52 +42,37 @@ def M(L,i,j):
 # b
 
 def best_mat_mult_time_fast(L):
-	memo = []
+	if L == []:
+		return 0
+	memo = {}
+	i = 1
+	j = len(L)-1
 	return M2(L, i, j, memo)
-
 
 def M2(L, i, j, memo):
 	
+	if (i,j) in memo:
+		return memo[(i,j)]
 	if i == j:  # mat times itself
-		return 0
+		memo[(i,j)] = 0
+		return memo[(i, j)]
 
-	mini = "not assigned"
+	memo[(i, j)] = "not assigned"
 	current_check = 0
 	for k in range(i, j):
 		# recursive call for Ai-Ak+Ak-Aj w/ multipication of pair
-		current_check = M(L, i, k) + M(L, k+1, j) + L[i-1]*L[k]*L[j]
-		if mini == "not assigned":  # first assign
-			mini = current_check
-		elif current_check < mini:
-			mini = current_check
+		current_check = M2(L, i, k, memo) + M2(L, k+1, j, memo) + L[i-1]*L[k]*L[j]
+		if memo[(i, j)] == "not assigned":  # first assign
+			memo[(i, j)] = current_check
+		elif current_check < memo[(i, j)]:
+			memo[(i, j)] = current_check
+	
+	return memo[(i, j)]
 
-	return mini
-
-
-# c
 
 def best_mat_mult_order(L):
 	pass
-"""
-	if (len(L)) == 3:  # stop recursive when there are 2 mat left
-		return (L[0]*L[1]*L[2], [0, 0])
 
-	right = best_mat_mult_time(L[1:])
-	left = best_mat_mult_time(L[:len(L)-1])
-
-	if right[0] < left[0]:
-		return (L[0]*L[1]*L[len(L)-1] + right, [0, right[1]])
-	else:
-		return (left + L[0]*L[len(L)-2]*L[len(L)-1], [left[1], len(L)-1])
-
-print (best_mat_mult_order([10,100,10,100]))
-
-def mult_order_to_str(mult_order):
-	if type(mult_order) is int:
-		return str(mult_order)
-
-	return f"({mult_order_to_str(mult_order[0])}) * ({mult_order_to_str(mult_order[1])})"
-"""
 
 ############
 # QUESTION 3
