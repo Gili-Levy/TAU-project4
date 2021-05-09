@@ -18,49 +18,48 @@ SUBMISSION_IDS = ["316296771"]
 # a
 
 def best_mat_mult_time(L):
-	if (len(L)) == 3:  # stop recursive when there are 2 mat left
-		return L[0]*L[1]*L[2]
-
-	right = best_mat_mult_time(L[1:])
-	left = best_mat_mult_time(L[:len(L)-1])
-
-	if right < left:
-		return L[0]*L[1]*L[len(L)-1] + right
-	else:
-		return left + L[0]*L[len(L)-2]*L[len(L)-1]
-
-#print(best_mat_mult_time([40, 20, 30, 10, 30]))
+	i = 1
+	j = len(L)-1
+	return M(L,i,j)
+	
+def M(L,i,j):
+	if i == j:  # mat times itself
+		return 0
+	
+	mini = "not assigned"
+	current_check = 0
+	for k in range (i,j):
+		current_check = M(L,i,k) + M(L,k+1,j) + L[i-1]*L[k]*L[j] # recursive call for Ai-Ak+Ak-Aj w/ multipication of pair
+		if mini == "not assigned": # first assign
+			mini  = current_check
+		elif current_check < mini:
+			mini = current_check
+	
+	return mini
+	
 # b
 
 def best_mat_mult_time_fast(L):
 	memo = []
-	return best_mat_mult_time_fast_with_memo(L, memo)
+	return M2(L, i, j, memo)
 
 
-def best_mat_mult_time_fast_with_memo(L, memo):
-	if L in memo:
-		return memo[memo.index(L)+1]
-
-	if (len(L)) == 3:  # stop recursive when there are 2 mat left
-		result = L[0]*L[1]*L[2]
-		memo.append(L)
-		memo.append(result)
-		return result
-
-	right = best_mat_mult_time(L[1:])
-	if L[1:] not in memo:
-		memo.append(L[1:])
-		memo.append(right)
+def M2(L, i, j, memo):
 	
-	left = best_mat_mult_time(L[:len(L)-1])
-	if L[:len(L)-1] not in memo:
-		memo.append(L[:len(L)-1])
-		memo.append(left)
+	if i == j:  # mat times itself
+		return 0
 
-	if right < left:
-		return L[0]*L[1]*L[len(L)-1] + right
-	else:
-		return left + L[0]*L[len(L)-2]*L[len(L)-1]
+	mini = "not assigned"
+	current_check = 0
+	for k in range(i, j):
+		# recursive call for Ai-Ak+Ak-Aj w/ multipication of pair
+		current_check = M(L, i, k) + M(L, k+1, j) + L[i-1]*L[k]*L[j]
+		if mini == "not assigned":  # first assign
+			mini = current_check
+		elif current_check < mini:
+			mini = current_check
+
+	return mini
 
 
 # c
@@ -274,7 +273,7 @@ def distance_mem(s1, s2, memo):  # s1 is what we want, s2 is what we have
 ########
 
 def test():
-	"""
+	
 	# Q2
 	L1 = [100,10,100, 10]
 	# a
@@ -287,7 +286,7 @@ def test():
 	if mult_order_to_str(best_mat_mult_order(L1)) != "(0) * ((1) * (2))":
 		print("Error in best_mat_mult_order")	
 
-	"""
+	
 	# Q3
 	# b
 	if(had_local(2,2,2) != 1):
@@ -341,5 +340,3 @@ def test():
 			distance_fast('sport', 'sort') != 1 or \
 			distance_fast('', 'ab') != 2 or distance_fast('kitten', 'sitting') != 3:
 		print("Error in distance_fast")
-
-test()
