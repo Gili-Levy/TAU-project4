@@ -31,7 +31,8 @@ def M(L,i,j):
 	mini = "not assigned"
 	current_check = 0
 	for k in range (i,j):
-		current_check = M(L,i,k) + M(L,k+1,j) + L[i-1]*L[k]*L[j] # recursive call for Ai-Ak+Ak-Aj w/ multipication of pair
+		# recursive call for Ai-Ak+Ak-Aj w/ multipication of pair
+		current_check = M(L, i, k) + M(L, k+1, j) + L[i-1]*L[k]*L[j]
 		if mini == "not assigned": # first assign
 			mini  = current_check
 		elif current_check < mini:
@@ -71,9 +72,42 @@ def M2(L, i, j, memo):
 
 
 def best_mat_mult_order(L):
-	pass
+	if L == []:
+		return []
+	memo = {}
+	i = 1
+	j = len(L)-1
+	memo[(0,0)] = L
+	return mult_order_to_str(M3(L, i, j, memo)[1])
 
 
+def M3(L, i, j, memo):
+
+	if (i, j) in memo:
+		return memo[(i, j)]
+	if i == j:  # mat times itself
+		memo[(i, j)] = (0,i)
+		return memo[(i, j)]
+
+	memo[(i, j)] = "not assigned"
+	current_check = 0
+	for k in range(i, j):
+		# recursive call for Ai-Ak+Ak-Aj w/ multipication of pair -- returns tuples
+		sum_left, tree_left = M3(L, i, k, memo)
+		sum_right, tree_right = M3(L, k+1, j, memo)
+		current_check = sum_left + sum_right + L[i-1]*L[k]*L[j]
+		if memo[(i, j)] == "not assigned" or current_check < memo[(i, j)][0]:
+			memo[(i, j)] = (current_check, [tree_left, tree_right])
+
+	return memo[(i, j)]
+
+def mult_order_to_str(mult_order):
+    if type(mult_order) is int:
+        return str(mult_order)
+
+    return f"({mult_order_to_str(mult_order[0])}) * ({mult_order_to_str(mult_order[1])})" 
+
+print (best_mat_mult_order([10,100,10,100]))
 ############
 # QUESTION 3
 ############
