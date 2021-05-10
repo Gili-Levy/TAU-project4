@@ -78,15 +78,15 @@ def best_mat_mult_order(L):
 	i = 1
 	j = len(L)-1
 	memo[(0,0)] = L
-	return mult_order_to_str(M3(L, i, j, memo)[1])
+	return M3(L, i, j, memo)[1]
+	# #return mult_order_to_str(M3(L, i, j, memo)[1])
 
 
 def M3(L, i, j, memo):
-
 	if (i, j) in memo:
 		return memo[(i, j)]
 	if i == j:  # mat times itself
-		memo[(i, j)] = (0,i)
+		memo[(i, j)] = (0,i-1)
 		return memo[(i, j)]
 
 	memo[(i, j)] = "not assigned"
@@ -104,10 +104,9 @@ def M3(L, i, j, memo):
 def mult_order_to_str(mult_order):
     if type(mult_order) is int:
         return str(mult_order)
-
     return f"({mult_order_to_str(mult_order[0])}) * ({mult_order_to_str(mult_order[1])})" 
 
-print (best_mat_mult_order([10,100,10,100]))
+
 ############
 # QUESTION 3
 ############
@@ -361,3 +360,5 @@ def test():
 			distance_fast('sport', 'sort') != 1 or \
 			distance_fast('', 'ab') != 2 or distance_fast('kitten', 'sitting') != 3:
 		print("Error in distance_fast")
+
+test()
