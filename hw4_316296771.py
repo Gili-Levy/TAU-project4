@@ -79,8 +79,6 @@ def best_mat_mult_order(L):
 	j = len(L)-1
 	memo[(0,0)] = L
 	return M3(L, i, j, memo)[1]
-	# #return mult_order_to_str(M3(L, i, j, memo)[1])
-
 
 def M3(L, i, j, memo):
 	if (i, j) in memo:
@@ -101,11 +99,11 @@ def M3(L, i, j, memo):
 
 	return memo[(i, j)]
 
-def mult_order_to_str(mult_order):
-    if type(mult_order) is int:
-        return str(mult_order)
-    return f"({mult_order_to_str(mult_order[0])}) * ({mult_order_to_str(mult_order[1])})" 
 
+def mult_order_to_str(mult_order):
+	if type(mult_order) is int:
+		return str(mult_order)
+	return f"({mult_order_to_str(mult_order[0])}) * ({mult_order_to_str(mult_order[1])})"
 
 ############
 # QUESTION 3
