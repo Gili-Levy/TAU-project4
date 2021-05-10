@@ -360,5 +360,3 @@ def test():
 			distance_fast('sport', 'sort') != 1 or \
 			distance_fast('', 'ab') != 2 or distance_fast('kitten', 'sitting') != 3:
 		print("Error in distance_fast")
-
-test()
